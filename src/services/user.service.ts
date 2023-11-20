@@ -1,34 +1,30 @@
+import { User } from '../api/users/user.interface'
+import { userCollection } from '../api/config/firebase/models'
 // services/userService.js
 
-const admin = require('firebase-admin');
-
 // Function to add a user
-export const addUser = async (uid:any, userData:any) => {
+export const addUser = async (user: User) => {
   try {
-    const userRef = admin.firestore().collection('users');
-    const newUserDoc = await userRef.add({
-      uid: uid,
-      ...userData,
-    });
-    return newUserDoc;
+    const addedUser = await userCollection.add(user)
+
+    return addedUser.id
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}
 
 // Function to get a user by UID
-export const getUserByUID = async (uid:any) => {
+export const getUserByUID = async (uid: any) => {
   try {
-    const usersRef = admin.firestore().collection('users');
-    const querySnapshot = await usersRef.where('uid', '==', uid).get();
+    const querySnapshot = await userCollection.where('uid', '==', uid).get()
 
     if (!querySnapshot.empty) {
-      const userDoc = querySnapshot.docs[0].data();
-      return userDoc;
+      const userDoc = querySnapshot.docs[0].data()
+      return userDoc
     } else {
-      return null;
+      return null
     }
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}
