@@ -1,0 +1,78 @@
+{
+  "name": "little-feather-apo",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint --fix src test",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "no-unused-vars": "warn",
+      "no-console": "warn",
+      "react-hooks/rules-of-hooks": "warn"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 80,
+    "semi": false
+  },
+  "keywords": [],
+  "author": "ADika",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "firebase": "^10.6.0",
+    "firebase-admin": "^11.11.0",
+    "helmet": "^7.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.2",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^20.2.5",
+    "@types/supertest": "^2.0.12",
+    "@types/uuid": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "<5.1.0"
+  }
+}
