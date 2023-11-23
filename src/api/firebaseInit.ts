@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 
 const router = express.Router();
 
-const serviceAccount = require('./firebase-secret.json');
+const serviceAccount = require('./firebase-config.json');
 
 const firebaseConfig = {
   credential: admin.credential.cert(serviceAccount),
