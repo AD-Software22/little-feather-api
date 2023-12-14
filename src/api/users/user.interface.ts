@@ -5,6 +5,7 @@ interface User {
   address?: string | null
   profile_picture?: string | null
   firebase_id: string
+  date_of_birth?: number | null
 }
 
 export { User }

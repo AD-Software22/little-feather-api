@@ -1,15 +1,13 @@
-import express from 'express';
-import admin from 'firebase-admin';
+import express from 'express'
+import admin from 'firebase-admin'
+require('dotenv').config()
 
-const router = express.Router();
-
-const serviceAccount = require('./firebase-config.json');
-
+const router = express.Router()
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS ?? '') ?? ''
 const firebaseConfig = {
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'babyapp-dbbc5.appspot.com', // Replace with your actual storage bucket name
-};
+}
 
-admin.initializeApp(firebaseConfig);
+admin.initializeApp(firebaseConfig)
 
-export default router;
+export default router

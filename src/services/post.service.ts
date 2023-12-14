@@ -1,115 +1,85 @@
-import admin from "firebase-admin";
-import { v4 as uuidv4 } from "uuid";
+import { getUserByFirebaseId } from './user.service'
+import {
+  fileReferenceCollection,
+  postCollection,
+} from '../api/config/firebase/models'
+import { fileReferenceTypeEnum } from '../common/constants'
+import * as babyService from './baby.service'
+import * as userService from './user.service'
 
-
-const db = admin.firestore();
-const postsCollection = db.collection("posts");
-const commentsCollection = db.collection("comments");
-const filesCollection = db.collection("files");
-
-export async function getAllPosts(): Promise<any[]> {
+export const getPostsByBabyId = async (sourceId: string, babyId: string) => {
   try {
-    const snapshot = await postsCollection.get();
-    const posts: any[] = [];
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      posts.push(data);
-    });
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts from Firestore:", error);
-    throw new Error("Internal server error");
-  }
-}
+    await babyService.checkUserBabyAccess(sourceId, babyId)
+    const postsQuerySnapshot = await postCollection
+      .where('baby_id', '==', babyId)
+      .orderBy('created_at', 'desc')
+      .get()
 
-export async function getPostsCommentsAndFiles(): Promise<any[]> {
-  try {
-    const postsQuerySnapshot = await postsCollection.orderBy("date", "desc").get();
-    const postsWithCommentsAndFiles = [];
-
-    for (const postDoc of postsQuerySnapshot.docs) {
-      const post = postDoc.data();
-      const postId = postDoc.id;
-
-      const commentsSnapshot = await commentsCollection.where("postId", "==", postId).get();
-      const comments = commentsSnapshot.docs.map((doc) => doc.data());
-
-      const filesSnapshot = await filesCollection.where("postId", "==", postId).get();
-      const files = filesSnapshot.docs.map((doc) => doc.data());
-
-      const postWithCommentsAndFiles = {
-        ...post,
-        commentsList: comments,
-        files,
-      };
-
-      postsWithCommentsAndFiles.push(postWithCommentsAndFiles);
+    const posts: any = []
+    postsQuerySnapshot.forEach((doc) => {
+      posts.push({ id: doc.id, ...doc.data() })
+    })
+    if (!posts.length) {
+      return []
     }
+    const postIds = posts.map((p: any) => p.id)
+    const fileReferences = await getAllPostFiles(postIds)
+    const users: any = await userService.getAllByIds(
+      posts.map((p: any) => p.creator_id)
+    )
 
-    return postsWithCommentsAndFiles;
+    const postsWithFiles = posts.map((p: any) => {
+      const fileReferencesForPost = fileReferences.docs
+        .filter((f: any) => f.data().post_id === p.id)
+        .map((f: any) => f.data())
+      const user = users.find((u: any) => u.id === p.creator_id)
+      return {
+        ...p,
+        file_references: fileReferencesForPost,
+        creator_user: user ?? null,
+      }
+    })
+
+    return postsWithFiles
   } catch (error) {
-    console.error('Error fetching posts with comments and files from Firestore:', error);
-    throw new Error('Internal server error');
+    console.error('Error fetching posts from Firestore:', error)
+    throw new Error('Internal server error')
   }
 }
+const getAllPostFiles = async (postIds: string[]) => {
+  return await fileReferenceCollection.where('post_id', 'in', postIds).get()
+}
 
-
-export async function addPostToDatabase(caption:any, imageFiles:any) {
+export async function create(sourceId: string, post: any) {
   try {
     // Create the post data
-    const post = {
-      caption: caption,
-      name: 'Bekon',
-      likes: 0,
-      comments: 0,
-      shares: 0,
-      profilePic: '',
-      date: admin.firestore.Timestamp.fromDate(new Date()),
-    };
+    const user: any = await getUserByFirebaseId(sourceId)
 
-    // Add the post to the posts collection
-    const addedPost = await postsCollection.add(post);
+    const addedPost = await postCollection.add({
+      baby_id: post.baby_id,
+      creator_id: user.id,
+      is_feed_post: post.is_feed_post,
+      created_at: post.created_at,
+    })
 
-    for (const imageFile of imageFiles) {
-      if (imageFile) {
-        const uploadedImageRef = await uploadImage(imageFile);
-        const image = {
-          firebaseURL: uploadedImageRef.imageContainerUrl,
-          firebaseFullURL: uploadedImageRef.imageUrl,
-          postId: addedPost.id,
-          mediaType: 'image',
-          type: 'post',
-        };
-        await filesCollection.add(image);
-      }
-    }
+    await uploadImageFiles(post.file_references, addedPost.id)
   } catch (error) {
-    console.error('Error adding post: ', error);
-    throw error;
+    console.error('Error adding post: ', error)
+    throw error
   }
 }
 
-const uploadImage = async (imageFile:any) => {
-  const imageFileName = uuidv4();
+const uploadImageFiles = async (fileReferences: any, addedPostId: string) => {
+  const uploadFilePromises = fileReferences.map(
+    async (imageFileReference: any) => {
+      const image = {
+        post_id: addedPostId,
+        type: fileReferenceTypeEnum.post,
+        url: imageFileReference,
+      }
+      await fileReferenceCollection.add(image)
+    }
+  )
 
-  // Create a storage reference with the generated filename
-  const storage = admin.storage().bucket(); // Use the correct Firebase Storage bucket reference
-  const imageContainerUrl = `postImages/${imageFileName}`;
-  const imageFileRef = storage.file(imageContainerUrl);
-
-  // Upload the image to Firebase Storage
-  await imageFileRef.save(imageFile.buffer, {
-    metadata: {
-      contentType: imageFile.mimetype,
-    },
-  });
-
-  // Get the download URL of the uploaded image with a 1-hour expiration time (adjust as needed)
-  const expiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
-  const imageUrl = await imageFileRef.getSignedUrl({
-    action: 'read',
-    expires: expiration,
-  });
-
-  return { imageContainerUrl, imageUrl };
+  await Promise.all(uploadFilePromises)
 }

@@ -5,9 +5,10 @@ const UserSchemas = {
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
     email: Joi.string().required(),
+    accessToken: Joi.string().required(),
     address: Joi.string().allow(null),
     profile_picture: Joi.string().allow(null),
-    firebase_id: Joi.string().required(),
+    date_of_birth: Joi.number().allow(null),
   }),
 }
 

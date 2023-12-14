@@ -1,0 +1,14 @@
+{
+    "type": "service_account",
+    "project_id": "little-feather-dev",
+    "private_key_id": "892e8f296edb5c87ef6bf179c3cf0b2ee02c688c",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC3UBq81sAwL+Ku\nZdD8pGm2/HeewAuz/hbikiPa0AI2vDLfhW4N9f6bwRoqd4lx3qFETYR1gycQ14yx\n43YMvH/VB86hb08CqjbKxtNEen2h+MqWTSHH7wU1im+u1uubSe+gpusP2hLdf00n\neEtg4pLY/u2YbvTyJ1i0xv2XDcXQuww2F5xiw9wL5zhjsZWwB3FtFKGskUjHEcEy\nZH2KWjaFcVb1SUN63iJ2fSkEExNqR/u07ibVQD1V7i7RquugV0B4XBARRemLwcCn\nTX0p5/XTSIzuitkZPgd0QpBke4IRklcO9bst3yNu/NXz78UDAu6u0fmsV5UCQaPr\nNpkesTzxAgMBAAECggEABwspOtkw1W0qm29CuWlvHTKMXV2FWZk9W394aJiKZDxl\nI0bxCpDpo4YXBXuWPLmMZmeo27vSTwSsRZvPCfhefFLWaQgyD9D25eHfxWtkO0p4\nLNAqCJDV6TeweMYt84ei0TBGuxNC2y9QeXA3K8Hq+PLrMdquF2WlBD266eBj6eQs\nRyKNz2L1GUXKweblhcsg82LTRdW8fxHvt4IIKhzFlVV2YTrA18Sev+4kSCUgbmmy\nuURNzvvxHX+ZwnGYSn6Lo2CzjOvd3HgDsunxjhjpw4YvV6W3uv4bVnexaDg3QKnV\nfp2gRqL1xD6t3a7G1aaowcu2Zk4Ph3iZ/FaHZvvIoQKBgQDy9C3JyeEv42DVIKC+\njciCt2xh1OQKbjlyfi+F22wet5NYC64HthbunDJ1Xi1yvi6ZA0Z3WemcC3R/nY6b\nhytFSWbZTPFIKTZbhttSWU3pvnmzddzB4FjUG62Y88ftVBQO8VZZPaJIZabcTU/q\nuKtv0WDzotlzp8LX1iVF1Wh24QKBgQDBKA7R5eKUJJ9EHXewtLQ8iRbVWyELqeGp\nrTYmneBrN/BWIV9mIitxu729oEbe6osq8xIY4xbT+YZ8hxYu2+gAWbqOi2i/39dG\nGikJ10hlbziaRLTWkFvf5PJHNUS6wSGtrFkQSoa8BZyXru7xV8fYlbxiijln2G0z\nneuQ2mRYEQKBgHS63UUWuhtIJD5CbvkfJjen6WsX3nkkfHWGK08lHc2kZibndbY+\nxsXeRmAd37hBqCHccP7nNFbFKjQmf146k4+2tLOzRDpnkrZnFPl77vNfkRmoh2if\nYg6HPeE/P8/HlduYGOTHuDEQphszCjK8h6Ix92MX22K2N+d7/GyRHKABAoGAB5hc\npNJGS475GEOUXkVsxOibFj6kGQJQFkzyUShqF602bRyY1LpJPQql1lwEDWXpnQG7\n13CuiB1KtYDWVXdeMw1UMaC3uLvDikUjEfj+Jsbt0dsbxUgd5Lrq7/PfRPytJ1gc\nlHBpxeDunGRLjv/lotWYd8N5qGSxPpNaHPMJeRECgYAbAj2WGrV6ZJddy+8uWae4\nyX1cq2ZjUH7zPux9YntfR/uvw4fwIaabIlqoHdL59B1EiSK+H6R2bqF+2ZbBA232\nqNrNfyayPd6c9UlVmFKjgQ/uRmUHtQA9Q26NjNKFMEpLGpM9Mh0vdfcNebkOCjNZ\nyYlRMliGAEouRe077FvImg==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-6lta1@little-feather-dev.iam.gserviceaccount.com",
+    "client_id": "111569994035316937034",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-6lta1%40little-feather-dev.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+  

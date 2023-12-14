@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import * as admin from 'firebase-admin'
 
 import ErrorResponse from './interfaces/ErrorResponse'
 
@@ -21,4 +22,29 @@ export function errorHandler(
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
   })
+}
+export const authenticateFirebaseToken = (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
+  const { authorization } = req.headers
+
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const idToken = authorization.split('Bearer ')[1]
+
+  admin
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      req.firebaseUserId = decodedToken.uid
+      return next()
+    })
+    .catch((error) => {
+      console.error('Firebase authentication error:', error)
+      return res.status(401).json({ error: 'Unauthorized' })
+    })
 }

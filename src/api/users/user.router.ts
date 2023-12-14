@@ -13,6 +13,9 @@ userRouter.post(
   }),
   userController.addUser
 )
-userRouter.get('/:uid', userController.getUserById)
+userRouter.get('/id', userController.getUserById)
+
+userRouter.get('/auth', userController.authenticateUser)
+
 
 export default userRouter

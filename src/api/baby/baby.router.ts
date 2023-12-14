@@ -1,6 +1,7 @@
+import { getLatestAddedBaby } from './../../services/baby.service'
 import express from 'express'
 import { createValidator } from 'express-joi-validation'
-import BabySchemas from './baby.shema'
+import BabySchemas from './baby.schema'
 import * as babyController from './baby.controller'
 
 const babyRouter = express.Router()
@@ -21,6 +22,8 @@ babyRouter.patch(
   babyController.updateBaby
 )
 babyRouter.get('/', babyController.listAllBabies)
+
+babyRouter.get('/latest', babyController.findLatestAddedBaby)
 
 babyRouter.get('/:baby_id', babyController.findOneBabyById)
 

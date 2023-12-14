@@ -12,6 +12,7 @@ const BabySchemas = {
     gender: Joi.string().required(),
     profile_picture: Joi.string().allow(null),
     place_of_birth: Joi.string().allow(null),
+    date_of_birth: Joi.number().allow(null),
     measurements: Joi.array().items(BabyMeasurementSchema),
     created_at: Joi.number().default(Math.floor(new Date().getTime() / 1000)),
   }),
