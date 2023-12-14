@@ -73,4 +73,6 @@ typings/
 .serverless
 
 dist
-src/api/firebase-secret.json
+src/api/firebase-config.json
+.vscode
+src/firebase-config.json
