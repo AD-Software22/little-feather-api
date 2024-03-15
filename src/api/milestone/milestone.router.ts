@@ -68,4 +68,25 @@ milestoneRouter.patch(
   milestoneController.updateYearMilestone
 )
 
+//we are in motion
+
+milestoneRouter.post(
+  '/in-motion',
+  validator.body(MilestoneSchemas.onCreateInMotion, {
+    joi: { convert: true, allowUnknown: false, abortEarly: true },
+  }),
+  milestoneController.addInMotion
+)
+milestoneRouter.get(
+  '/:baby_id/in-motion',
+  milestoneController.findOneInMotionMilestoneByBabyId
+)
+// milestoneRouter.patch(
+//   '/:baby_id/month-by-month',
+//   validator.body(MilestoneSchemas.onCreateMonthlyDiary, {
+//     joi: { convert: true, allowUnknown: false, abortEarly: true },
+//   }),
+//   milestoneController.updateMonthByMonth
+// )
+
 export default milestoneRouter

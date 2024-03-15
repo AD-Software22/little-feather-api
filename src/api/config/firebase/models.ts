@@ -8,6 +8,7 @@ const fileReferenceCollection = admin.firestore().collection('FileReference')
 const familyTreeCollection = admin.firestore().collection('FamilyTree')
 const monthByMonthCollection = admin.firestore().collection('MonthByMonth')
 const yearMilestoneCollection = admin.firestore().collection('YearMilestone')
+const inMotionCollection = admin.firestore().collection('InMotionMilestone')
 
 export {
   userCollection,
@@ -18,4 +19,5 @@ export {
   familyTreeCollection,
   monthByMonthCollection,
   yearMilestoneCollection,
+  inMotionCollection
 }

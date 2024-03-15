@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import * as familyTreeService from '../../services/familytree.service'
 import * as monthByMonthService from '../../services/monthByMonth.service'
 import * as yearMilestoneService from '../../services/yearMilestone.service'
+import * as inMotionService from '../../services/inMotion.service'
 
 export const addFamilyTree = async (req: any, res: Response) => {
   try {
@@ -132,6 +133,39 @@ export const findOneYearMilestoneByBabyId = async (req: any, res: Response) => {
       sourceId,
       req.params.baby_id,
       req.query?.year ?? null
+    )
+    if (!milestone) {
+      return res.status(404).json()
+    }
+    res.status(200).json(milestone)
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+//in motion
+export const addInMotion = async (req: any, res: Response) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const addedMilestone = await inMotionService.create(sourceId, req.body, res)
+    res.status(201).json({
+      message: 'In motion added successfully',
+      monthByMonth_id: addedMilestone,
+    })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const findOneInMotionMilestoneByBabyId = async (
+  req: any,
+  res: Response
+) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const milestone = await inMotionService.findOneByBabyId(
+      sourceId,
+      req.params.baby_id
     )
     if (!milestone) {
       return res.status(404).json()

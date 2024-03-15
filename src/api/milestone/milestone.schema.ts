@@ -32,6 +32,15 @@ const MilestoneSchemas = {
     year: Joi.number().required().min(2020).max(new Date().getFullYear()),
     created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
   }),
+
+  // in motion
+  onCreateInMotion: Joi.object().keys({
+    baby_id: Joi.string().required(),
+    image: Joi.string().required(),
+    type: Joi.string().valid('canRollOver', 'canCrouch', 'canSit', 'canWalk').required(),
+    created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
+  }),
+
 }
 
 export default MilestoneSchemas
