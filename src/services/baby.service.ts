@@ -65,6 +65,23 @@ export const listAll = async (sourceId: string) => {
     throw error
   }
 }
+export const listAllByIds = async (babyIds: any) => {
+  try {
+    const querySnapshot = await babyCollection
+      .where(admin.firestore.FieldPath.documentId(), 'in', babyIds)
+      .get()
+
+    const babies: any[] = []
+    querySnapshot.forEach((doc) => {
+      babies.push({ id: doc.id, ...doc.data() })
+    })
+
+    return babies
+  } catch (error) {
+    console.error('Error getting records:', error)
+    throw error
+  }
+}
 export const getLatestAddedBaby = async (sourceId: string) => {
   try {
     const babies = await listAll(sourceId)
@@ -89,7 +106,13 @@ export const findOne = async (sourceId: string, babyId: string) => {
     const existingBaby = await babyRef.get()
 
     if (existingBaby.exists) {
-      return { id: existingBaby.id, ...existingBaby.data() }
+      return {
+        id: existingBaby.id,
+        ...existingBaby.data(),
+        measurements: existingBaby
+          ?.data()
+          ?.measurements?.sort((a: any, b: any) => b.timestamp - a.timestamp),
+      }
     } else {
       return null
     }
@@ -124,11 +147,18 @@ export const addBabyMeasurementData = async (
   }
 }
 
-export const getUserBabies = async (firebaseUserId: any, babyId?: any) => {
+export const getUserBabies = async (
+  firebaseUserId: any,
+  babyId?: any,
+  userId?: any
+) => {
   try {
-    const user = await getUserByFirebaseId(firebaseUserId)
+    if (!userId) {
+      const user = await getUserByFirebaseId(firebaseUserId)
+      userId = user?.id || null
+    }
 
-    let query = userBabyCollection.where('user_id', '==', user?.id)
+    let query = userBabyCollection.where('user_id', '==', userId)
 
     if (babyId) {
       query = query.where('baby_id', '==', babyId)
@@ -146,6 +176,28 @@ export const getUserBabies = async (firebaseUserId: any, babyId?: any) => {
     throw error
   }
 }
+// Function to delete a baby document by ID
+const deleteBabyById = async (babyId: string) => {
+  try {
+    const babyRef = babyCollection.doc(babyId)
+    await babyRef.delete()
+    console.log(`Baby with ID ${babyId} deleted successfully`)
+  } catch (error) {
+    console.error(`Error deleting baby with ID ${babyId}:`, error)
+  }
+}
+
+// Function to delete babies based on a list of IDs
+export const deleteBabiesByIdList = async (babyIds: []) => {
+  try {
+    // Use Promise.all to concurrently delete babies
+    await Promise.all(babyIds.map(deleteBabyById))
+    console.log('All babies deleted successfully')
+  } catch (error) {
+    console.error('Error deleting babies:', error)
+  }
+}
+
 export async function checkUserBabyAccess(sourceId: string, babyId: string) {
   const userBabyIds = await getUserBabies(sourceId, babyId)
   if (userBabyIds?.length === 0) {

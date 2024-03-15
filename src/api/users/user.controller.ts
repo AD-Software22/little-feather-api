@@ -42,3 +42,14 @@ export const authenticateUser = async (req: any, res: any) => {
     res.status(500).json({ error: error.message })
   }
 }
+
+export const deleteUser = async (req: any, res: any) => {
+  await userService
+    .deleteUserAndRelatedData(req.firebaseUserId)
+    .then((user: any) => {
+      res.status(200).json({ message: 'User deleted successfully' })
+    })
+    .catch((error: any) => {
+      res.status(500).json({ error: error.message })
+    })
+}

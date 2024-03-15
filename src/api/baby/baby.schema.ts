@@ -3,7 +3,8 @@ import * as Joi from 'joi'
 const BabyMeasurementSchema = Joi.object({
   weight: Joi.number().allow(null),
   height: Joi.number().allow(null),
-  created_at: Joi.number().default(Math.floor(new Date().getTime() / 1000)),
+  created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
+  timestamp: Joi.number().default(Math.floor(new Date().getTime() / 1000)),
 })
 
 const BabySchemas = {
@@ -14,7 +15,7 @@ const BabySchemas = {
     place_of_birth: Joi.string().allow(null),
     date_of_birth: Joi.number().allow(null),
     measurements: Joi.array().items(BabyMeasurementSchema),
-    created_at: Joi.number().default(Math.floor(new Date().getTime() / 1000)),
+    created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
   }),
   onUpdate: Joi.object().keys({
     name: Joi.string().required(),

@@ -1,7 +1,7 @@
 import express from 'express'
-import morgan from 'morgan'
+const morgan = require('morgan')
 import helmet from 'helmet'
-import cors from 'cors'
+const cors = require('cors')
 import * as middlewares from './middlewares'
 import firebaseInit from './api/firebaseInit'
 import crudRouter from './api/routes'

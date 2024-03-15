@@ -16,6 +16,6 @@ userRouter.post(
 userRouter.get('/id', userController.getUserById)
 
 userRouter.get('/auth', userController.authenticateUser)
-
+userRouter.delete('/', userController.deleteUser)
 
 export default userRouter
