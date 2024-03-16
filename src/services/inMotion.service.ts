@@ -54,3 +54,35 @@ export const findOneByBabyId = async (
     throw error
   }
 }
+
+export const update = async (sourceId: string, inMotionMilestoneData: any) => {
+  try {
+    await babyService.checkUserBabyAccess(
+      sourceId,
+      inMotionMilestoneData.baby_id
+    )
+
+    const findMilestoneQuery = await inMotionCollection
+      .where('baby_id', '==', inMotionMilestoneData.baby_id)
+      .where('type', '==', inMotionMilestoneData.type)
+      .get()
+
+    const resultList: any[] = []
+    if (findMilestoneQuery.size > 0) {
+      const result: any[] = []
+      findMilestoneQuery.forEach((doc) => {
+        resultList.push({ id: doc.id, ...doc.data() })
+      })
+    } else {
+      return null
+    }
+    const inMotionMilestone = resultList[0]
+
+    const monthByMonthRef = inMotionCollection.doc(inMotionMilestone.id)
+    await monthByMonthRef.update(inMotionMilestoneData)
+
+    return inMotionMilestone.id
+  } catch (error) {
+    throw error
+  }
+}

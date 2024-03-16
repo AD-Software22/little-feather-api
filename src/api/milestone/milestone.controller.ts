@@ -157,6 +157,19 @@ export const addInMotion = async (req: any, res: Response) => {
   }
 }
 
+export const updateInMotionMilestone = async (req: any, res: Response) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const addedMilestone = await inMotionService.update(sourceId, req.body)
+    res.status(200).json({
+      message: 'In Motion milestone updated successfully',
+      familyTree_id: addedMilestone,
+    })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
 export const findOneInMotionMilestoneByBabyId = async (
   req: any,
   res: Response
