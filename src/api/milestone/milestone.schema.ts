@@ -46,7 +46,7 @@ const MilestoneSchemas = {
   // my first birthday
   onCreateFirstBirthday: Joi.object().keys({
     baby_id: Joi.string().required(),
-    text: Joi.string().required(),
+    text: Joi.string().required().allow(''),
     images: Joi.array()
       .items(
         Joi.object({

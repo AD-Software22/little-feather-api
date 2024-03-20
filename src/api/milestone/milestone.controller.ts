@@ -207,3 +207,35 @@ export const addFirstBirthday = async (req: any, res: Response) => {
     res.status(500).json({ error: error.message })
   }
 }
+
+export const updateFirstBirthdayMilestone = async (req: any, res: Response) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const addedMilestone = await firstBirthdayService.update(sourceId, req.body)
+    res.status(200).json({
+      message: 'First Birthday milestone updated successfully',
+      familyTree_id: addedMilestone,
+    })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const findOneFirstBirthdayMilestoneByBabyId = async (
+  req: any,
+  res: Response
+) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const milestone = await firstBirthdayService.findOneByBabyId(
+      sourceId,
+      req.params.baby_id
+    )
+    if (!milestone) {
+      return res.status(404).json()
+    }
+    res.status(200).json(milestone)
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}

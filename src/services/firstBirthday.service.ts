@@ -10,8 +10,7 @@ export const create = async (
   try {
     const existingInMotionType = await findOneByBabyId(
       sourceId,
-      firstBirthdayData.baby_id,
-      firstBirthdayData.text
+      firstBirthdayData.baby_id
     )
     if (existingInMotionType) {
       return res.status(400).json({
@@ -25,19 +24,12 @@ export const create = async (
   }
 }
 
-export const findOneByBabyId = async (
-  sourceId: string,
-  babyId: string,
-  text = null
-) => {
+export const findOneByBabyId = async (sourceId: string, babyId: string) => {
   try {
     await babyService.checkUserBabyAccess(sourceId, babyId)
 
     let query = firstBirthdayCollection.where('baby_id', '==', babyId)
 
-    if (text) {
-      query = query.where('text', '==', text)
-    }
     const querySnapshot = await query.get()
 
     if (querySnapshot.size > 0) {
@@ -51,6 +43,40 @@ export const findOneByBabyId = async (
     }
   } catch (error) {
     console.error('Error getting records:', error)
+    throw error
+  }
+}
+
+export const update = async (
+  sourceId: string,
+  firstBirthdayMilestoneData: any
+) => {
+  try {
+    await babyService.checkUserBabyAccess(
+      sourceId,
+      firstBirthdayMilestoneData.baby_id
+    )
+
+    const findMilestoneQuery = await firstBirthdayCollection
+      .where('baby_id', '==', firstBirthdayMilestoneData.baby_id)
+      .get()
+
+    const resultList: any[] = []
+    if (findMilestoneQuery.size > 0) {
+      const result: any[] = []
+      findMilestoneQuery.forEach((doc) => {
+        resultList.push({ id: doc.id, ...doc.data() })
+      })
+    } else {
+      return null
+    }
+    const inMotionMilestone = resultList[0]
+
+    const monthByMonthRef = firstBirthdayCollection.doc(inMotionMilestone.id)
+    await monthByMonthRef.update(firstBirthdayMilestoneData)
+
+    return inMotionMilestone.id
+  } catch (error) {
     throw error
   }
 }

@@ -89,7 +89,7 @@ milestoneRouter.patch(
   milestoneController.updateInMotionMilestone
 )
 
-// my first birthday 
+// my first birthday
 milestoneRouter.post(
   '/first-birthday',
   validator.body(MilestoneSchemas.onCreateFirstBirthday, {
@@ -97,7 +97,15 @@ milestoneRouter.post(
   }),
   milestoneController.addFirstBirthday
 )
-
-
-
+milestoneRouter.get(
+  '/:baby_id/first-birthday',
+  milestoneController.findOneFirstBirthdayMilestoneByBabyId
+)
+milestoneRouter.patch(
+  '/:baby_id/first-birthday',
+  validator.body(MilestoneSchemas.onCreateFirstBirthday, {
+    joi: { convert: true, allowUnknown: false, abortEarly: true },
+  }),
+  milestoneController.updateFirstBirthdayMilestone
+)
 export default milestoneRouter
