@@ -37,10 +37,25 @@ const MilestoneSchemas = {
   onCreateInMotion: Joi.object().keys({
     baby_id: Joi.string().required(),
     image: Joi.string().required(),
-    type: Joi.string().valid('canRollOver', 'canCrouch', 'canSit', 'canWalk').required(),
+    type: Joi.string()
+      .valid('canRollOver', 'canCrouch', 'canSit', 'canWalk')
+      .required(),
     created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
   }),
 
+  // my first birthday
+  onCreateFirstBirthday: Joi.object().keys({
+    baby_id: Joi.string().required(),
+    text: Joi.string().required(),
+    images: Joi.array()
+      .items(
+        Joi.object({
+          position: Joi.number().required(),
+          url: Joi.string().required(),
+        })
+      )
+      .required(),
+  }),
 }
 
 export default MilestoneSchemas

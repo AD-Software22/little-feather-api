@@ -9,6 +9,9 @@ const familyTreeCollection = admin.firestore().collection('FamilyTree')
 const monthByMonthCollection = admin.firestore().collection('MonthByMonth')
 const yearMilestoneCollection = admin.firestore().collection('YearMilestone')
 const inMotionCollection = admin.firestore().collection('InMotionMilestone')
+const firstBirthdayCollection = admin
+  .firestore()
+  .collection('FirstBirthdayMilestone')
 
 export {
   userCollection,
@@ -19,5 +22,6 @@ export {
   familyTreeCollection,
   monthByMonthCollection,
   yearMilestoneCollection,
-  inMotionCollection
+  inMotionCollection,
+  firstBirthdayCollection,
 }
