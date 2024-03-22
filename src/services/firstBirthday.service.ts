@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import { firstBirthdayCollection } from '../api/config/firebase/models'
 import * as babyService from './baby.service'
+import { deleteMediaFromStorage } from './base.service'
 
 export const create = async (
   sourceId: string,
@@ -8,17 +9,19 @@ export const create = async (
   res: Response
 ) => {
   try {
-    const existingInMotionType = await findOneByBabyId(
+    const existingFirstBirthdayType = await findOneByBabyId(
       sourceId,
       firstBirthdayData.baby_id
     )
-    if (existingInMotionType) {
+    if (existingFirstBirthdayType) {
       return res.status(400).json({
         error: `Milestone for this baby already exists. Try update.`,
       })
     }
-    const addedInMotion = await firstBirthdayCollection.add(firstBirthdayData)
-    return addedInMotion.id
+    const addedFirstirthday = await firstBirthdayCollection.add(
+      firstBirthdayData
+    )
+    return addedFirstirthday.id
   } catch (error) {
     throw error
   }
@@ -63,20 +66,67 @@ export const update = async (
 
     const resultList: any[] = []
     if (findMilestoneQuery.size > 0) {
-      const result: any[] = []
       findMilestoneQuery.forEach((doc) => {
         resultList.push({ id: doc.id, ...doc.data() })
       })
     } else {
       return null
     }
-    const inMotionMilestone = resultList[0]
+    const firstBirthdayMilestoneDatabase = resultList[0]
 
-    const monthByMonthRef = firstBirthdayCollection.doc(inMotionMilestone.id)
-    await monthByMonthRef.update(firstBirthdayMilestoneData)
+    const oldImageIndex = firstBirthdayMilestoneDatabase.images.findIndex(
+      (newImage: any) =>
+        !firstBirthdayMilestoneData.images.some(
+          (oldImage: any) => oldImage.url === newImage.url
+        )
+    )
 
-    return inMotionMilestone.id
+    if (oldImageIndex !== -1) {
+      const oldImageUrl =
+        firstBirthdayMilestoneDatabase.images[oldImageIndex].url
+      const filesToDelete = getResizedImageUrls(oldImageUrl)
+      deleteMediaFromStorage(filesToDelete)
+    }
+
+    const firstbirthdayRef = firstBirthdayCollection.doc(
+      firstBirthdayMilestoneDatabase.id
+    )
+    await firstbirthdayRef.update(firstBirthdayMilestoneData)
+
+    return firstBirthdayMilestoneDatabase.id
   } catch (error) {
     throw error
   }
+}
+
+function getResizedImageUrls(originalUrl: string): string[] {
+  const allUrls: string[] = [originalUrl]
+
+  const imageSizes = [
+    { width: 100, height: 100 },
+    { width: 160, height: 90 },
+    { width: 350, height: 200 },
+  ]
+
+  for (const size of imageSizes) {
+    const pathAndRest = originalUrl.split('%2F')
+    const idAndRest = pathAndRest.pop()!.split('?')
+    const id = idAndRest[0]
+    const path = pathAndRest.join('%2F')
+    const rest = idAndRest.slice(1).join('?')
+    const resizedUrl =
+      path +
+      '%2Fresized%2F' +
+      id +
+      '_' +
+      size.width +
+      'x' +
+      size.height +
+      '?' +
+      rest
+
+    allUrls.push(resizedUrl)
+  }
+
+  return allUrls
 }
