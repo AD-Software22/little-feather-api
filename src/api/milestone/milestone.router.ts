@@ -108,4 +108,25 @@ milestoneRouter.patch(
   }),
   milestoneController.updateFirstBirthdayMilestone
 )
+
+// my first holiday
+
+milestoneRouter.post(
+  '/first-holiday',
+  validator.body(MilestoneSchemas.onCreateHoliday, {
+    joi: { convert: true, allowUnknown: false, abortEarly: true },
+  }),
+  milestoneController.addFirstHoliday
+)
+milestoneRouter.get(
+  '/:baby_id/first-holiday',
+  milestoneController.findOneFirstHolidayMilestoneByBabyId
+)
+milestoneRouter.patch(
+  '/:baby_id/first-holiday',
+  validator.body(MilestoneSchemas.onCreateHoliday, {
+    joi: { convert: true, allowUnknown: false, abortEarly: true },
+  }),
+  milestoneController.updateFirstHolidayMilestone
+)
 export default milestoneRouter

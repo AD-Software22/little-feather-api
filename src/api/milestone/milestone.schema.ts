@@ -56,17 +56,21 @@ const MilestoneSchemas = {
       )
       .required(),
   }),
+  // first holiday
+  onCreateHoliday: Joi.object().keys({
+    baby_id: Joi.string().required(),
+    images: Joi.array().items(
+      Joi.object({
+        position: Joi.number().required(),
+        url: Joi.string().required(),
+      })
+    ),
+    text: Joi.string().required(),
+    type: Joi.string()
+      .valid('easter', 'ramadan', 'christmas', 'hanukkah', 'diwali')
+      .required(),
+    created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
+  }),
 }
-
-// first holiday
-//  onCreateHoliday: Joi.object().keys({
-//   baby_id: Joi.string().required(),
-//   image: Joi.string().required(),
-//   text: Joi.string().required(),
-//   type: Joi.string()
-//     .valid('easter', 'ramadan', 'christmas', 'canWalk')
-//     .required(),
-//   created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
-// }),
 
 export default MilestoneSchemas
