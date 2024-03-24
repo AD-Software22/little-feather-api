@@ -89,10 +89,10 @@ export const update = async (
       deleteMediaFromStorage(filesToDelete)
     }
 
-    const firstbirthdayRef = firstBirthdayCollection.doc(
+    const firstBirthdayRef = firstBirthdayCollection.doc(
       firstBirthdayMilestoneDatabase.id
     )
-    await firstbirthdayRef.update(firstBirthdayMilestoneData)
+    await firstBirthdayRef.update(firstBirthdayMilestoneData)
 
     return firstBirthdayMilestoneDatabase.id
   } catch (error) {
