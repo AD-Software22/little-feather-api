@@ -280,7 +280,8 @@ export const findOneFirstHolidayMilestoneByBabyId = async (
     const sourceId = req.firebaseUserId
     const milestone = await firstHolidayService.findOneByBabyId(
       sourceId,
-      req.params.baby_id
+      req.params.baby_id,
+      req.params.type
     )
     if (!milestone) {
       return res.status(404).json()

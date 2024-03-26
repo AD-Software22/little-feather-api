@@ -12,7 +12,8 @@ export const create = async (
   try {
     const existingFirstHoliday = await findOneByBabyId(
       sourceId,
-      firstBirthdayData.baby_id
+      firstBirthdayData.baby_id,
+      firstBirthdayData.type
     )
     if (existingFirstHoliday) {
       return res.status(400).json({
@@ -28,11 +29,19 @@ export const create = async (
   }
 }
 
-export const findOneByBabyId = async (sourceId: string, babyId: string) => {
+export const findOneByBabyId = async (
+  sourceId: string,
+  babyId: string,
+  type: string
+) => {
   try {
     await babyService.checkUserBabyAccess(sourceId, babyId)
 
     let query = firstHolidayCollection.where('baby_id', '==', babyId)
+
+    if (type) {
+      query = query.where('type', '==', type)
+    }
 
     const querySnapshot = await query.get()
 
@@ -83,8 +92,7 @@ export const update = async (
     )
 
     if (oldImageIndex !== -1) {
-      const oldImageUrl =
-        firstHolidayMilestoneResult.images[oldImageIndex].url
+      const oldImageUrl = firstHolidayMilestoneResult.images[oldImageIndex].url
       const filesToDelete = getResizedImageUrls(oldImageUrl)
       deleteMediaFromStorage(filesToDelete)
     }

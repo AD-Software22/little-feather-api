@@ -119,7 +119,7 @@ milestoneRouter.post(
   milestoneController.addFirstHoliday
 )
 milestoneRouter.get(
-  '/:baby_id/first-holiday',
+  '/:baby_id/:type/first-holiday',
   milestoneController.findOneFirstHolidayMilestoneByBabyId
 )
 milestoneRouter.patch(
