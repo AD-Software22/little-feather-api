@@ -65,7 +65,7 @@ const MilestoneSchemas = {
         url: Joi.string().required(),
       })
     ),
-    text: Joi.string().required(),
+    text: Joi.string().required().allow(''),
     type: Joi.string()
       .valid('easter', 'ramadan', 'christmas', 'hanukkah', 'diwali')
       .required(),
