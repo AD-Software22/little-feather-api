@@ -4,6 +4,7 @@ import * as monthByMonthService from '../../services/monthByMonth.service'
 import * as yearMilestoneService from '../../services/yearMilestone.service'
 import * as inMotionService from '../../services/inMotion.service'
 import * as firstBirthdayService from '../../services/firstBirthday.service'
+import * as firstHolidayService from '../../services/firstHoliday.service'
 
 export const addFamilyTree = async (req: any, res: Response) => {
   try {
@@ -230,6 +231,57 @@ export const findOneFirstBirthdayMilestoneByBabyId = async (
     const milestone = await firstBirthdayService.findOneByBabyId(
       sourceId,
       req.params.baby_id
+    )
+    if (!milestone) {
+      return res.status(404).json()
+    }
+    res.status(200).json(milestone)
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+//First holiday
+
+export const addFirstHoliday = async (req: any, res: Response) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const addedMilestone = await firstHolidayService.create(
+      sourceId,
+      req.body,
+      res
+    )
+    res.status(201).json({
+      message: 'First holiday added successfully',
+      firstHoliday_id: addedMilestone,
+    })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const updateFirstHolidayMilestone = async (req: any, res: Response) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const addedMilestone = await firstHolidayService.update(sourceId, req.body)
+    res.status(200).json({
+      message: 'First Holiday milestone updated successfully',
+      familyTree_id: addedMilestone,
+    })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const findOneFirstHolidayMilestoneByBabyId = async (
+  req: any,
+  res: Response
+) => {
+  try {
+    const sourceId = req.firebaseUserId
+    const milestone = await firstHolidayService.findOneByBabyId(
+      sourceId,
+      req.params.baby_id,
+      req.params.type
     )
     if (!milestone) {
       return res.status(404).json()
