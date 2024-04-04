@@ -27,7 +27,7 @@ const BabySchemas = {
   onCreateMeasurement: Joi.object().keys({
     weight: Joi.number().allow(null),
     height: Joi.number().allow(null),
-    timestamp: Joi.date(),
+    created_at: Joi.number().default(Math.floor(new Date().getTime() / 1000)),
   }),
 }
 

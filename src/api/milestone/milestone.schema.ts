@@ -29,7 +29,7 @@ const MilestoneSchemas = {
     baby_id: Joi.string().required(),
     image: Joi.string().required(),
     month: Joi.number().required().min(1).max(12),
-    year: Joi.number().required().min(2020).max(new Date().getFullYear()),
+    year: Joi.number().required().min(2015).max(new Date().getFullYear()),
     created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
   }),
 
@@ -65,7 +65,7 @@ const MilestoneSchemas = {
         url: Joi.string().required(),
       })
     ),
-    text: Joi.string().required().allow(''),
+    text: Joi.string().allow(''),
     type: Joi.string()
       .valid('easter', 'ramadan', 'christmas', 'hanukkah', 'diwali')
       .required(),
