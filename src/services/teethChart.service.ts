@@ -15,7 +15,7 @@ export const create = async (
     )
     if (existingTeethChartPosition) {
       return res.status(400).json({
-        error: `Milestone for this position ${teethChartData.type} exist for selected baby. Try update.`,
+        error: `Milestone for this position ${teethChartData.position} exist for selected baby. Try update.`,
       })
     }
     const addedTeethChart = await teethChartCollection.add(teethChartData)
@@ -28,7 +28,7 @@ export const create = async (
 export const findOneByBabyId = async (
   sourceId: string,
   babyId: string,
-  position = null
+  position: number
 ) => {
   try {
     await babyService.checkUserBabyAccess(sourceId, babyId)

@@ -319,7 +319,8 @@ export const findOneTeethChartMilestoneByBabyId = async (
     const sourceId = req.firebaseUserId
     const milestone = await teethChartService.findOneByBabyId(
       sourceId,
-      req.params.baby_id
+      req.params.baby_id,
+      req.params.position
     )
     if (!milestone) {
       return res.status(404).json()
