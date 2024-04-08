@@ -129,4 +129,26 @@ milestoneRouter.patch(
   }),
   milestoneController.updateFirstHolidayMilestone
 )
+
+// teeth chart
+
+milestoneRouter.post(
+  '/teeth-chart',
+  validator.body(MilestoneSchemas.onCreateTeethChart, {
+    joi: { convert: true, allowUnknown: false, abortEarly: true },
+  }),
+  milestoneController.addTeethChart
+)
+milestoneRouter.get(
+  '/:baby_id/teeth-chart',
+  milestoneController.findOneTeethChartMilestoneByBabyId
+)
+// milestoneRouter.patch(
+//   '/:baby_id/teeth-chart',
+//   validator.body(MilestoneSchemas.onCreateHoliday, {
+//     joi: { convert: true, allowUnknown: false, abortEarly: true },
+//   }),
+//   milestoneController.updateFirstHolidayMilestone
+// )
+
 export default milestoneRouter

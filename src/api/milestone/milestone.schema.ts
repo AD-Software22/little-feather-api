@@ -71,6 +71,13 @@ const MilestoneSchemas = {
       .required(),
     created_at: Joi.date().default(Math.floor(new Date().getTime() / 1000)),
   }),
+
+  // teech chart
+  onCreateTeethChart: Joi.object().keys({
+    baby_id: Joi.string().required(),
+    position: Joi.number().required(),
+    date: Joi.number().required(),
+  }),
 }
 
 export default MilestoneSchemas
